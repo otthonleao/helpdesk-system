@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: 'user-service-api'
+  data:
+    mongodb:
+      uri: 'mongodb+srv://help-desk-user:<db_password>@clusterhelpdesk.ij4rs.mongodb.net/<database_name>?retryWrites=true&w=majority&appName=ClusterHelpDesk'
+      auto-index-creation: true # Cria index dos usuários de forma automática
