@@ -26,7 +26,8 @@ public class UserService {
             return userMapper.fromEntity(savedDatabase); // Mapeia o retorno para o DTO (UserResponse)
         }
 
-        return null;
+        throw new UserAlreadyExistsException("User with email: " + createUserRequest.email()
+                + " already exists. Type: " + CreateUserRequest.class.getName());
     }
 
 }
