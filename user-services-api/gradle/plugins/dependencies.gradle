@@ -4,6 +4,9 @@ repositories {
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
 }
 dependencies {
+    // Starter para acesso a dados com o MongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
     // Starter para desenvolvimento de aplicativos web com Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
