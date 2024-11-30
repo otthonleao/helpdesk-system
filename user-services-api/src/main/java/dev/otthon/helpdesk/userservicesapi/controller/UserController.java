@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import model.exceptions.UserAlreadyExistsException;
 import model.request.CreateUserRequest;
@@ -41,6 +42,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserResponse> create(
+            @Valid
             @Parameter(description = "User id", required = true, example = "674808b02ff2181e545a8778")
             @RequestBody final CreateUserRequest createUserRequest) {
 
