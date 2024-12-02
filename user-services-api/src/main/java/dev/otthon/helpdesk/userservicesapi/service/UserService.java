@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import model.exceptions.UserAlreadyExistsException;
 import model.request.CreateUserRequest;
 import model.response.UserResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +16,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse insert(final CreateUserRequest createUserRequest) {
         isEmailAlreadyExists(createUserRequest.email());
-        var toEntity = userMapper.fromRequest(createUserRequest);
+        var toEntity = userMapper.fromRequest(createUserRequest)
+                .withPassword(passwordEncoder.encode(createUserRequest.password()));
         var savedDatabase = userRepository.save(toEntity);
         return userMapper.fromEntity(savedDatabase); // Mapeia o retorno para o DTO (UserResponse)
     }

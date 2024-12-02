@@ -4,6 +4,10 @@ repositories {
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
 }
 dependencies {
+
+    // Spring Security Crypto to encode password
+    implementation 'org.springframework.security:spring-security-crypto:6.4.1'
+
     // Library for common classes
     implementation 'dev.otthon.helpdesk:common-lib:1.0.0'
 
@@ -29,9 +33,6 @@ dependencies {
     // MapStruct
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-    // Spring Security Crypto to encode password
-    implementation 'org.springframework.security:spring-security-crypto:5.5.1'
 
     // Dependência de teste
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
