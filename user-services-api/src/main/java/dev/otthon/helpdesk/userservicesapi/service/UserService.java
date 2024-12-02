@@ -18,16 +18,18 @@ public class UserService {
 
     @Transactional
     public UserResponse insert(final CreateUserRequest createUserRequest) {
+        isEmailAlreadyExists(createUserRequest.email());
+        var toEntity = userMapper.fromRequest(createUserRequest);
+        var savedDatabase = userRepository.save(toEntity);
+        return userMapper.fromEntity(savedDatabase); // Mapeia o retorno para o DTO (UserResponse)
+    }
 
-        if (!userRepository.existsUserByEmail(createUserRequest.email())) {
-            var toEntity = userMapper.fromRequest(createUserRequest);
-            var savedDatabase = userRepository.save(toEntity);
-
-            return userMapper.fromEntity(savedDatabase); // Mapeia o retorno para o DTO (UserResponse)
+    private void isEmailAlreadyExists(final String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new UserAlreadyExistsException(
+                    "DATA CONFLICT = User with email=[" + email + "] already exists."
+            );
         }
-
-        throw new UserAlreadyExistsException("User with email: " + createUserRequest.email()
-                + " already exists. Type: " + CreateUserRequest.class.getName());
     }
 
 }

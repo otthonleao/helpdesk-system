@@ -1,6 +1,5 @@
 package dev.otthon.helpdesk.userservicesapi.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import model.exceptions.UserAlreadyExistsException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
@@ -24,7 +23,9 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
         problemDetail.setTitle("User already exists");
-        problemDetail.setProperty("TimeStamp", Instant.now());
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("errorSourceClass", exception.getStackTrace()[0].getClassName());
+        problemDetail.setProperty("errorSourceMethod", exception.getStackTrace()[0].getMethodName());
 
         return problemDetail;
     }
@@ -34,7 +35,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Payload field validation failed");
         problemDetail.setTitle("Invalid input");
-        problemDetail.setProperty("TimeStamp", Instant.now());
+        problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getDescription(true)));
 
         Map<String, List<String>> errors = exception.getBindingResult().getFieldErrors()
