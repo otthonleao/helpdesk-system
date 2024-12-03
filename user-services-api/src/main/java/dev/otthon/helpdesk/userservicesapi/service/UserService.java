@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -45,6 +47,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponse findById(String id) {
         return userMapper.fromEntity(find(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponse> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::fromEntity)
+                .toList();
     }
 
     private User find(final String id) {

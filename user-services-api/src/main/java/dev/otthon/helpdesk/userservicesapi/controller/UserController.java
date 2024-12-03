@@ -1,5 +1,6 @@
 package dev.otthon.helpdesk.userservicesapi.controller;
 
+import dev.otthon.helpdesk.userservicesapi.entity.User;
 import dev.otthon.helpdesk.userservicesapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -85,6 +87,16 @@ public class UserController {
             @Parameter(description = "User id", required = true, example = "674808b02ff2181e545a8778")
             @PathVariable(name = "id") final String id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @Operation(summary = "Find all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users found", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> findAll() {
+        return ResponseEntity.ok().body(userService.findAll());
     }
 
 }
