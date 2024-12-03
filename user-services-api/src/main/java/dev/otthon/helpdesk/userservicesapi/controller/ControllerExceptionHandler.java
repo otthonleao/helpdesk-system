@@ -1,5 +1,6 @@
 package dev.otthon.helpdesk.userservicesapi.controller;
 
+import model.exceptions.ResourceNotFoundException;
 import model.exceptions.UserAlreadyExistsException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,18 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail handlerEntityNotFoundException(ResourceNotFoundException exception) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        problemDetail.setTitle("Entity not found in database");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("errorSourceClass", exception.getStackTrace()[0].getClassName());
+        problemDetail.setProperty("errorSourceMethod", exception.getStackTrace()[0].getMethodName());
+
+        return problemDetail;
+    }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ProblemDetail handlerUserAlreadyExistsException(UserAlreadyExistsException exception) {
