@@ -74,6 +74,17 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-
+    @Operation(summary = "Find user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResourceNotFoundException.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    @GetMapping("/{id}")
+    ResponseEntity<UserResponse> findById(
+            @Parameter(description = "User id", required = true, example = "674808b02ff2181e545a8778")
+            @PathVariable(name = "id") final String id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
 
 }

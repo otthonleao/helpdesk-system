@@ -42,10 +42,15 @@ public class UserService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public UserResponse findById(String id) {
+        return userMapper.fromEntity(find(id));
+    }
+
     private User find(final String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Object not found. Id: " + id + ", Type: " + UserResponse.class.getSimpleName()
+                        "Object with ID: " + id + " not found , Type: " + UserResponse.class.getSimpleName()
                 ));
     }
 
