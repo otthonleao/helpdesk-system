@@ -18,6 +18,7 @@ import model.response.UserResponse;
 
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,12 +39,13 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created"),
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "422", description = "Invalid input", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = MethodArgumentNotValidException.class))),
             @ApiResponse(responseCode = "409", description = "User already exists", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserAlreadyExistsException.class)))
     })
     @PostMapping
     public ResponseEntity<UserResponse> create(
-            @Valid
             @Parameter(description = "User id", required = true, example = "674808b02ff2181e545a8778")
+            @Valid
             @RequestBody final CreateUserRequest createUserRequest) {
 
         UserResponse createdUser = userService.insert(createUserRequest);
@@ -62,13 +64,13 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResourceNotFoundException.class))),
             @ApiResponse(responseCode = "409", description = "User already exists", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserAlreadyExistsException.class))),
-            @ApiResponse(responseCode = "422", description = "Unprocessable entity", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "422", description = "Unprocessable entity", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = MethodArgumentNotValidException.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(
-            @Valid
             @PathVariable(name = "id") final String id,
+            @Valid
             @RequestBody final UpdateUserRequest updateUserRequest) {
 
         UserResponse updatedUser = userService.update(id, updateUserRequest);
@@ -82,7 +84,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
     })
     @GetMapping("/{id}")
-    ResponseEntity<UserResponse> findById(
+    public ResponseEntity<UserResponse> findById(
             @Parameter(description = "User id", required = true, example = "674808b02ff2181e545a8778")
             @PathVariable(name = "id") final String id) {
         return ResponseEntity.ok(userService.findById(id));
