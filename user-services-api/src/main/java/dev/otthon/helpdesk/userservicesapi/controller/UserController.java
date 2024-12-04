@@ -1,6 +1,5 @@
 package dev.otthon.helpdesk.userservicesapi.controller;
 
-import dev.otthon.helpdesk.userservicesapi.entity.User;
 import dev.otthon.helpdesk.userservicesapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
