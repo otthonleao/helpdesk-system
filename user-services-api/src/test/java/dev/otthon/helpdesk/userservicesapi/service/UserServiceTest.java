@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+import static dev.otthon.helpdesk.userservicesapi.creator.CreatorUtils.generateMock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +32,7 @@ class UserServiceTest {
     @Test
     void whenCallFindByIdWithValidIdThenReturnUser() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(new User()));
-        when(userMapper.fromEntity(any(User.class))).thenReturn(mock(UserResponse.class));
+        when(userMapper.fromEntity(any(User.class))).thenReturn(generateMock(UserResponse.class));
 
         final var response = userService.findById("1");
 
