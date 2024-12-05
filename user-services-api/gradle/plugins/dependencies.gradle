@@ -4,6 +4,8 @@ repositories {
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
 }
 dependencies {
+    // Mockito Test dependency to work with Record
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
 
     // Spring Security Crypto to encode password
     implementation 'org.springframework.security:spring-security-crypto:6.4.1'
