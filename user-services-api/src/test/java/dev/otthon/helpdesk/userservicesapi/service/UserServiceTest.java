@@ -6,6 +6,7 @@ import dev.otthon.helpdesk.userservicesapi.repository.UserRepository;
 import model.exceptions.ResourceNotFoundException;
 import model.exceptions.UserAlreadyExistsException;
 import model.request.CreateUserRequest;
+import model.request.UpdateUserRequest;
 import model.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -113,6 +114,75 @@ class UserServiceTest {
         verify(userMapper, times(0)).fromRequest(request);
         verify(passwordEncoder, times(0)).encode(request.password());
         verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    void testUpdateWithInvalidIdShouldThrowResourceNotFoundException() {
+        final var request = generateMock(UpdateUserRequest.class);
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        try {
+            userService.update("1", request);
+            fail("Exception not thrown");
+        } catch (Exception e) {
+            assertEquals(ResourceNotFoundException.class, e.getClass());
+            assertEquals("Object with ID: 1 not found , Type: " + UserResponse.class.getSimpleName(), e.getMessage());
+        }
+
+        verify(userRepository).findById("1");
+        verify(userMapper, times(0)).update(any(), any());
+        verify(passwordEncoder, times(0)).encode(request.password());
+        verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    void testUpdateWithEmailBelongAnotherUserShouldThrowUserAlreadyExistsException() {
+        final var request = generateMock(UpdateUserRequest.class);
+        final var entity = generateMock(User.class);
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(entity));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(entity));
+
+        try {
+            userService.update("1", request);
+            fail("Exception not thrown");
+        } catch (Exception e) {
+            assertEquals(UserAlreadyExistsException.class, e.getClass());
+            assertEquals("DATA VIOLATION = Email [ " + request.email() + " ] already exists for another user.", e.getMessage());
+        }
+
+        verify(userRepository).findById(anyString());
+        verify(userRepository).findByEmail(request.email());
+        verify(userMapper, times(0)).update(any(), any());
+        verify(passwordEncoder, times(0)).encode(request.password());
+        verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    void testUpdateShouldReturnUserResponseOnSuccess() {
+        final var id = "1";
+        final var request = generateMock(UpdateUserRequest.class);
+        final var entity = generateMock(User.class).withId(id);
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(entity));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(entity));
+        when(userMapper.update(any(), any())).thenReturn(entity);
+        when(passwordEncoder.encode(anyString())).thenReturn("password");
+        when(userRepository.save(any(User.class))).thenReturn(entity);
+        when(userMapper.fromEntity(any(User.class))).thenReturn(generateMock(UserResponse.class));
+
+        final var response = userService.update(id, request);
+
+        assertNotNull(response);
+        assertEquals(UserResponse.class, response.getClass());
+
+        verify(userRepository).findById(anyString());
+        verify(userRepository).findByEmail(request.email());
+        verify(userMapper).update(request, entity);
+        verify(passwordEncoder).encode(request.password());
+        verify(userMapper).fromEntity(any(User.class));
+        verify(userRepository).save(any(User.class));
     }
 
 }
