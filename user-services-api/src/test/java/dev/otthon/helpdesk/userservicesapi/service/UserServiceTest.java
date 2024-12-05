@@ -3,6 +3,7 @@ package dev.otthon.helpdesk.userservicesapi.service;
 import dev.otthon.helpdesk.userservicesapi.entity.User;
 import dev.otthon.helpdesk.userservicesapi.mapper.UserMapper;
 import dev.otthon.helpdesk.userservicesapi.repository.UserRepository;
+import model.exceptions.ResourceNotFoundException;
 import model.response.UserResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,19 @@ class UserServiceTest {
 
         Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(userMapper, Mockito.times(1)).fromEntity(Mockito.any(User.class));
+    }
+
+    @Test
+    void whenCallFindByIdWithInvalidIdThenThrowResourceNotFoundException() {
+        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        try {
+            userService.findById("1");
+            fail("ResourceNotFoundException not thrown");
+        } catch (Exception e) {
+            Assertions.assertEquals(ResourceNotFoundException.class, e.getClass());
+            Assertions.assertEquals("Object with ID: 1 not found , Type: " + UserResponse.class.getSimpleName(), e.getMessage());
+        }
+
     }
 
 }
