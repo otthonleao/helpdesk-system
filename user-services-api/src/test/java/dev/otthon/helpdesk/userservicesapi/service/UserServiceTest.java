@@ -4,6 +4,8 @@ import dev.otthon.helpdesk.userservicesapi.entity.User;
 import dev.otthon.helpdesk.userservicesapi.mapper.UserMapper;
 import dev.otthon.helpdesk.userservicesapi.repository.UserRepository;
 import model.exceptions.ResourceNotFoundException;
+import model.exceptions.UserAlreadyExistsException;
+import model.request.CreateUserRequest;
 import model.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -69,6 +71,48 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).findAll();
         verify(userMapper, times(2)).fromEntity(any(User.class));
+    }
+
+    @Test
+    void testInsertShouldReturnUserResponseOnSuccess() {
+        final var request = generateMock(CreateUserRequest.class);
+
+        when(userMapper.fromRequest(any())).thenReturn(new User());
+        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(passwordEncoder.encode(anyString())).thenReturn("password");
+        when(userRepository.save(any(User.class))).thenReturn(new User());
+        when(userMapper.fromEntity(any(User.class))).thenReturn(generateMock(UserResponse.class));
+
+        final var response = userService.insert(request);
+
+        assertNotNull(response);
+        assertEquals(UserResponse.class, response.getClass());
+
+        verify(userMapper).fromRequest(request);
+        verify(userRepository).existsByEmail(request.email());
+        verify(passwordEncoder).encode(request.password());
+        verify(userRepository).save(any(User.class));
+
+    }
+
+    @Test
+    void testInsertShouldThrowExceptionWhenUserAlreadyExists() {
+        final var request = generateMock(CreateUserRequest.class);
+
+        when(userRepository.existsByEmail(anyString())).thenReturn(true);
+
+        try {
+            userService.insert(request);
+            fail("Exception not thrown");
+        } catch (Exception e) {
+            assertEquals(UserAlreadyExistsException.class, e.getClass());
+            assertEquals("DATA CONFLICT = User with email=[" + request.email() + "] already exists.", e.getMessage());
+        }
+
+        verify(userRepository).existsByEmail(request.email());
+        verify(userMapper, times(0)).fromRequest(request);
+        verify(passwordEncoder, times(0)).encode(request.password());
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
 }
