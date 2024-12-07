@@ -4,6 +4,8 @@ repositories {
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
 }
 dependencies {
+    // Biblioteca de geração de daods aleatórios para testes
+    testImplementation 'uk.co.jemos.podam:podam:8.0.2.RELEASE'
 
     // Spring Security Crypto to encode password
     implementation 'org.springframework.security:spring-security-crypto:6.4.1'
@@ -26,6 +28,7 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok:1.18.34'
 
     // Binding para o MapStruct com Lombok
     implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
