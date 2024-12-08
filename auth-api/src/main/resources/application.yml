@@ -1,3 +1,6 @@
 spring:
   application:
     name: 'auth-api'
+
+jwt.secret: '/kY2D9C87UyfZDu0Rbp8ySLG0m3vhVKyCaBFFuTkpKP7Sxre6g4pppmTfyv5mwOwZe9s6X9oZEVCObejjZYSu8xpKVqjV9rlzo6peKXoItY='
+jwt.expiration: 120000
