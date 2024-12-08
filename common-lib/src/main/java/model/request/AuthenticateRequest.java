@@ -10,13 +10,13 @@ import java.io.Serializable;
 
 public record AuthenticateRequest(
 
-        @Schema(description = "Email of the user", example = "meu_email@mail.com")
+        @Schema(description = "Email of the user", example = "otthon@mail.com")
         @Email(message = "Invalid email")
         @NotBlank(message = "Email is required and can't be empty")
         @Size(min = 5, max = 50, message = "Email must contain between 5 and 50 characters")
         String email,
 
-        @Schema(description = "Password of the user", example = "123456")
+        @Schema(description = "Password of the user", example = "senha123")
         @NotBlank(message = "Password is required and can't be empty")
         @Size(min = 6, max = 30, message = "Password must contain between 6 and 30 characters")
         String password
