@@ -38,7 +38,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(final AuthenticateRequest authenticateRequest) throws Exception {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody final AuthenticateRequest authenticateRequest) throws Exception {
         return ResponseEntity.ok().body(
                 new JWTAuthenticationImpl(jwtUtils, authenticationConfiguration.getAuthenticationManager())
                         .authenticate(authenticateRequest));

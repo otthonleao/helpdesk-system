@@ -37,7 +37,7 @@ public class JWTAuthenticationImpl {
         final var token = jwtUtils.generateToken(detailsDTO);
         return AuthenticationResponse.builder()
                 .type("JWT")
-                .token("Bearer" + token)
+                .token("Bearer: " + token)
                 .build();
     }
 

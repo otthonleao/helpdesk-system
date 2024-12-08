@@ -1,7 +1,7 @@
 package dev.otthon.helpdesk.auth.exception;
 
 import org.springframework.http.*;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ProblemDetail handlerEntityNotFoundException(UsernameNotFoundException exception) {
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail handlerEntityNotFoundException(BadCredentialsException exception) {
 
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
         problemDetail.setTitle("User not found");
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setProperty("errorSourceClass", exception.getStackTrace()[0].getClassName());
