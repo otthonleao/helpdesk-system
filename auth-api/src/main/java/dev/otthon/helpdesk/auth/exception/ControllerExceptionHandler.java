@@ -1,5 +1,6 @@
 package dev.otthon.helpdesk.auth.exception;
 
+import model.exceptions.RefreshTokenExpired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
@@ -18,6 +19,17 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(RefreshTokenExpired.class)
+    public ProblemDetail handlerEntityNotFoundException(RefreshTokenExpired exception) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+        problemDetail.setTitle("Token expired");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("errorSourceClass", exception.getStackTrace()[0].getClassName());
+        problemDetail.setProperty("errorSourceMethod", exception.getStackTrace()[0].getMethodName());
+
+        return problemDetail;
+    }
     @ExceptionHandler(BadCredentialsException.class)
     public ProblemDetail handlerEntityNotFoundException(BadCredentialsException exception) {
 
