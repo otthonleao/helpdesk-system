@@ -1,12 +1,19 @@
 spring:
   application:
     name: 'user-service-api'
-  data:
-    mongodb:
-      uri: 'mongodb+srv://help-desk-user:<db_password>@clusterhelpdesk.ij4rs.mongodb.net/<database_name>?retryWrites=true&w=majority&appName=ClusterHelpDesk'
-      auto-index-creation: true # Cria index dos usuários de forma automática
-springdoc:
-  openapi:
-    title: 'User Service API'
-    description: 'User Management API'
-    version: '1.0.0'
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+
+# As properties abaixo agora são definidas no arquivo 'user-service-api-dev.yml' em um repositório privado no GitHub
+#  data:
+#    mongodb:
+#      uri: 'mongodb+srv://help-desk-user:<db_password>@clusterhelpdesk.ij4rs.mongodb.net/<database_name>?retryWrites=true&w=majority&appName=ClusterHelpDesk'
+#      auto-index-creation: true # Cria index dos usuários de forma automática
+#  springdoc:
+#    openapi:
+#      title: 'User Service API'
+#      description: 'User Management API'
+#      version: '1.0.0'
+#  server:
+#    port: ${SERVER_PORT:8080}
