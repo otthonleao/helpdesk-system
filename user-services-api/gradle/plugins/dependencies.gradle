@@ -4,6 +4,13 @@ repositories {
     maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
 }
 dependencies {
+
+    // Starter para configuração do Spring Cloud Config
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+    // Starter para configuração do Spring Cloud
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
     // Biblioteca de geração de daods aleatórios para testes
     testImplementation 'uk.co.jemos.podam:podam:8.0.2.RELEASE'
 
