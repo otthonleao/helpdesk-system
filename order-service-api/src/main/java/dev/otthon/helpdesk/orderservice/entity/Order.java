@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import model.enums.OrderStatusEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -35,6 +36,10 @@ public class Order implements Serializable {
 
     @Column(nullable = false, length = 3000)
     private String description;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum status = OrderStatusEnum.OPEN;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
