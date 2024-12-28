@@ -44,6 +44,6 @@ public interface OrderMapper {
         return LocalDateTime.now();
     }
 
-
+    List<OrderResponse> fromEntities(List<Order> orders);
 
 }

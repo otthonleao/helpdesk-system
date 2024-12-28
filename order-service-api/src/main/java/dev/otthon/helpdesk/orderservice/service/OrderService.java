@@ -11,6 +11,8 @@ import model.exceptions.ResourceNotFoundException;
 import model.request.CreateOrderRequest;
 import model.request.UpdateOrderRequest;
 import model.response.OrderResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,11 @@ public class OrderService {
 
     private final OrderRepository repository;
     private final OrderMapper mapper;
+
+    public Page<Order> findAllPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, org.springframework.data.domain.Sort.Direction.valueOf(direction), orderBy);
+        return repository.findAll(pageRequest);
+    }
 
     public void deleteById(final Long id) {
         if (!repository.existsById(id)) {
