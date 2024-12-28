@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class OrderController {
 
     private final OrderService service;
-    private final OrderMapper mapper;
+    private final OrderMapper orderMapper;
 
     @Operation(summary = "Delete order by ID")
     @ApiResponses(value = {
@@ -61,7 +61,7 @@ public class OrderController {
             @Parameter(description = "Order ID", example = "2", required = true)
             @PathVariable final Long id
     ) {
-        return ResponseEntity.ok().body(mapper.fromEntity(service.findById(id)));
+        return ResponseEntity.ok().body(orderMapper.fromEntity(service.findById(id)));
     }
 
     @Operation(summary = "Update order")
