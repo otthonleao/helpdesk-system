@@ -23,6 +23,13 @@ public class OrderService {
     private final OrderRepository repository;
     private final OrderMapper mapper;
 
+    public void deleteById(final Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Object not found. Id: " + id + ", Type: " + Order.class.getSimpleName());
+        }
+        repository.deleteById(id);
+    }
+
     public OrderResponse update(final Long id, UpdateOrderRequest request) {
         Order entity = findById(id);
         entity = mapper.fromRequest(entity, request);

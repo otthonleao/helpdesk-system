@@ -31,6 +31,23 @@ public class OrderController {
     private final OrderService service;
     private final OrderMapper mapper;
 
+    @Operation(summary = "Delete order by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No content"),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(
+            @NotNull(message = "The order id must be informed")
+            @Parameter(description = "Order ID", example = "1", required = true)
+            @PathVariable final Long id
+    ) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @Operation(summary = "Find order by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order found"),
