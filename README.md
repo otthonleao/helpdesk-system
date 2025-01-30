@@ -1,10 +1,8 @@
-# helpdesk-system (em desenvolvimento)
-
-# Visão Geral
+# Helpdesk System (em desenvolvimento)
 
 O projeto possui microsserviços para simular o gerenciamento de informações dos usuários e ordens de serviços.
 
-# Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Spring Boot: Framework Java para criação de aplicações web e microsserviços.
 - Spring Cloud: Conjunto de ferramentas para construir sistemas distribuídos.
@@ -16,7 +14,7 @@ O projeto possui microsserviços para simular o gerenciamento de informações d
 - Docker: Plataforma para criação e gerenciamento de contêineres.
 - GitHub: Plataforma de hospedagem de código e controle de versão.
 
-# Estrutura do Projeto
+## Estrutura do Projeto
 
 ### Componentes Principais
 
@@ -37,7 +35,7 @@ O projeto possui microsserviços para simular o gerenciamento de informações d
 - Mensageria: Comunicação assíncrona com RabbitMQ.
 - Integração Contínua: Utilizando GitHub e Docker para versionamento e implantação.
 
-# Instalação
+## Instalação
 
 ### Pré-requisitos
 
